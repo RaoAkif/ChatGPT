@@ -5,6 +5,8 @@ import ChatButton from "./components/ChatButton";
 import AttachIcon from "./components/AttachIcon";
 import ScrollDownButton from "./components/ScrollDownButton";
 import AiBotIcon from "./components/AiBotIcon";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const BACKEND_URL = "/api/chat";
 
@@ -36,7 +38,7 @@ export default function Home() {
 
     const temporaryResponse = {
       role: "ai" as const,
-      content: "Please wait...",
+      content: "",
     };
     setMessages((prev) => [...prev, temporaryResponse]);
 
@@ -58,6 +60,8 @@ export default function Home() {
         role: "ai" as const,
         content: data.data || "No response from AI.",
       };
+
+      console.log(data)
 
       setMessages((prev) => {
         const updatedMessages = [...prev];
@@ -104,7 +108,7 @@ export default function Home() {
     <div className="flex flex-col h-screen bg-[#212121] text-gray-100">
       <div className="w-full bg-[#212121] p-4">
         <div className="mx-auto">
-        <h1 className="text-2xl font-bold text-white text-left">ChatFusion</h1>
+          <h1 className="text-2xl font-bold text-white text-left">ChatFusion</h1>
         </div>
       </div>
 
@@ -123,13 +127,18 @@ export default function Home() {
               <div
                 className={`px-4 py-2 rounded-2xl max-w-[80%] ${
                   msg.role === "ai"
-                    ? "text-gray-100"
+                    ? "text-gray-100 text-justify"
                     : "bg-[#2F2F2F] text-white ml-auto"
                 }`}
               >
                 <div className="flex items-center">
-                  {msg.content}
-                  {isLoading && msg.content === "Please wait..." && (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    className="markdown"
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                  {isLoading && msg.content === "" && (
                     <span className="ml-2 flex gap-1">
                       <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                       <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
