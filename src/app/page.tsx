@@ -66,10 +66,26 @@ export default function Home() {
               key={index}
               className={`flex gap-4 mb-4 ${msg.role === "ai" ? "justify-start" : "justify-end flex-row-reverse"}`}
             >
+              {msg.role === "ai" && (
+                <div className="flex items-start">
+                  {/* AI Icon */}
+                  <div className="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center text-white mr-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8c.79 0 1.5-.71 1.5-1.5S8.79 9 8 9s-1.5.71-1.5 1.5S7.21 11 8 11zm8 0c.79 0 1.5-.71 1.5-1.5S16.79 9 16 9s-1.5.71-1.5 1.5.71 1.5 1.5 1.5zm-4 4c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+
               <div
                 className={`px-4 py-2 rounded-2xl max-w-[80%] ${
                   msg.role === "ai"
-                    ? "text-gray-100"
+                    ? "text-gray-100 bg-gray-800 border border-gray-700"
                     : "bg-[#1F2937] text-white ml-auto"
                 }`}
               >
@@ -77,6 +93,7 @@ export default function Home() {
               </div>
             </div>
           ))}
+
           {isLoading && (
             <div className="flex gap-4 mb-4">
               <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
