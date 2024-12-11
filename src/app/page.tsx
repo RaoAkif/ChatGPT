@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 type Message = {
   role: "user" | "ai";
@@ -13,10 +13,8 @@ export default function Home() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [showDownArrow, setShowDownArrow] = useState(false); // State to control the visibility of the down arrow
 
-  const messagesEndRef = useRef<null | HTMLDivElement>(null); // Ref for the message container
-  const chatContainerRef = useRef<null | HTMLDivElement>(null); // Ref for the chat container
+  const chatContainerRef = useRef<null | HTMLDivElement>(null);
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -27,7 +25,6 @@ export default function Home() {
     setIsLoading(true);
     setIsButtonDisabled(true);
 
-    // Temporary AI message with loading dots
     const temporaryResponse = {
       role: "ai" as const,
       content: "Please wait  ",
@@ -35,13 +32,11 @@ export default function Home() {
     setMessages((prev) => [...prev, temporaryResponse]);
 
     setTimeout(async () => {
-      // Replace temporary AI response with the real response after 5 seconds
       const aiMessage = { role: "ai" as const, content: "Here's the real AI response!" };
-      
-      // Replace the last AI message (the "Please wait" message)
+  
       setMessages((prev) => {
         const updatedMessages = [...prev];
-        updatedMessages[updatedMessages.length - 1] = aiMessage; // Replace the last AI message
+        updatedMessages[updatedMessages.length - 1] = aiMessage;
         return updatedMessages;
       });
 
@@ -56,38 +51,6 @@ export default function Home() {
     }
   };
 
-  // Effect to scroll to the bottom whenever messages change
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      // Check if the user is already at the bottom
-      const container = chatContainerRef.current;
-      if (container) {
-        const atBottom =
-          container.scrollHeight - container.scrollTop === container.clientHeight;
-        setShowDownArrow(!atBottom);
-      }
-
-      // Always scroll to the bottom
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
-  const handleScroll = () => {
-    if (chatContainerRef.current) {
-      const container = chatContainerRef.current;
-      const atBottom =
-        container.scrollHeight - container.scrollTop === container.clientHeight;
-      setShowDownArrow(!atBottom);
-    }
-  };
-
-  const handleScrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-      setShowDownArrow(false); // Hide the arrow after scrolling
-    }
-  };
-
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       <div className="w-full bg-gray-800 border-b border-gray-700 p-4">
@@ -99,7 +62,6 @@ export default function Home() {
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto pb-32 pt-4"
-        onScroll={handleScroll}
       >
         <div className="max-w-3xl mx-auto px-4">
           {messages.map((msg, index) => (
@@ -141,25 +103,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* Scroll target */}
-      <div ref={messagesEndRef} />
-
-      {showDownArrow && (
-        <button
-          onClick={handleScrollToBottom}
-          className="fixed bottom-16 right-4 bg-gray-700 text-white p-3 rounded-full"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6"
-          >
-            <path d="M12 16l4-4h-3V4h-2v8H8l4 4z" />
-          </svg>
-        </button>
-      )}
 
       <div className="fixed bottom-0 w-full" style={{ backgroundColor: '#111827' }}>
         <div className="max-w-3xl mx-auto pb-4">
