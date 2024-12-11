@@ -25,40 +25,41 @@ export default function Home() {
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    // Add user message to the conversation
     const userMessage = { role: "user" as const, content: message };
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
     setIsLoading(true);
-    setIsButtonDisabled(true); // Disable the send button
+    setIsButtonDisabled(true); // Disable the send button immediately
 
-    // Simulate AI thinking for 5 seconds
     setTimeout(async () => {
-      // After 5 seconds, add a dummy response
       const dummyResponse = dummyResponses[Math.floor(Math.random() * dummyResponses.length)];
       const aiMessage = { role: "ai" as const, content: dummyResponse };
       setMessages((prev) => [...prev, aiMessage]);
 
-      // Simulate real AI response after the thinking message
       setTimeout(() => {
         const realResponse = { role: "ai" as const, content: "Here's the real AI response!" };
         setMessages((prev) => [...prev, realResponse]);
         setIsLoading(false);
-        setIsButtonDisabled(false); // Re-enable the send button
-      }, 2000); // Real response delay
-    }, 5000); // Thinking delay of 5 seconds
+        setIsButtonDisabled(false); // Re-enable the send button after the AI's response
+      }, 2000);
+    }, 5000);
+  };
+
+  // Prevent sending message via Enter if button is disabled
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !isButtonDisabled) {
+      handleSend();
+    }
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
-      {/* Header */}
       <div className="w-full bg-gray-800 border-b border-gray-700 p-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-2xl font-bold text-white">Chat</h1>
         </div>
       </div>
 
-      {/* Messages Container */}
       <div className="flex-1 overflow-y-auto pb-32 pt-4">
         <div className="max-w-3xl mx-auto px-4">
           {messages.map((msg, index) => (
@@ -100,7 +101,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Input Area */}
       <div className="fixed bottom-0 w-full bg-gray-800 border-t border-gray-700 p-4">
         <div className="max-w-3xl mx-auto">
           <div className="flex gap-3 items-center">
@@ -108,7 +108,7 @@ export default function Home() {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              onKeyPress={handleKeyPress} // Use the new key press handler
               placeholder="Type your message..."
               className="flex-1 rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent placeholder-gray-400"
             />
