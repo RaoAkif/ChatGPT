@@ -1,11 +1,6 @@
-// /api/chat/route.ts
-// TODO: Implement the chat API with Groq and web scraping with Cheerio and Puppeteer
-// Refer to the Next.js Docs on how to read the Request body: https://nextjs.org/docs/app/building-your-application/routing/route-handlers
-// Refer to the Groq SDK here on how to use an LLM: https://www.npmjs.com/package/groq-sdk
-// Refer to the Cheerio docs here on how to parse HTML: https://cheerio.js.org/docs/basics/loading
-// Refer to Puppeteer docs here: https://pptr.dev/guides/what-is-puppeteer
-
 import Groq from "groq-sdk";
+import puppeteer from "puppeteer";
+import * as cheerio from 'cheerio';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -15,13 +10,22 @@ interface PostRequestBody {
 
 const prompt = `You are an expert to generate a beautiful, well-structured Markdown-formatted answer for the following query:`;
 
+async function fetchHTML(url: string): Promise<string> {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: 'networkidle2' });
+  const content = await page.content();
+  await browser.close();
+  return content;
+}
+
 export async function POST(req: Request): Promise<Response> {
   try {
     const body: PostRequestBody = await req.json();
     const { query } = body;
 
-    console.log(query)
-    
+    console.log(query);
+
     if (!query) {
       return new Response(
         JSON.stringify({ error: "Missing required parameter: query" }),
@@ -29,12 +33,24 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
+    // Check for a URL in the query
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urls = query.match(urlRegex);
+
+    let scrapedContent = '';
+    
+    if (urls) {
+      scrapedContent = await fetchHTML(urls[0]);
+      const $ = cheerio.load(scrapedContent);
+      scrapedContent = $('body').text();
+    }
+
     const completion: string = await groq.chat.completions
       .create({
         model: "llama3-8b-8192",
         messages: [
           { role: "system", content: prompt },
-          { role: "user", content: query.trim() },
+          { role: "user", content: `${query.trim()} ${scrapedContent}` },
         ],
       })
       .then((chatCompletion) => chatCompletion.choices[0]?.message?.content || "");
