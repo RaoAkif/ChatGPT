@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 type Message = {
   role: "user" | "ai";
@@ -20,7 +21,7 @@ export default function Home() {
     if (!message.trim()) return;
 
     const userMessage = { role: "user" as const, content: message };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setMessage("");
     setIsLoading(true);
     setIsButtonDisabled(true);
@@ -29,12 +30,15 @@ export default function Home() {
       role: "ai" as const,
       content: "Please wait  ",
     };
-    setMessages((prev) => [...prev, temporaryResponse]);
+    setMessages(prev => [...prev, temporaryResponse]);
 
     setTimeout(async () => {
-      const aiMessage = { role: "ai" as const, content: "Here's the real AI response!" };
-  
-      setMessages((prev) => {
+      const aiMessage = {
+        role: "ai" as const,
+        content: "Here's the real AI response!",
+      };
+
+      setMessages(prev => {
         const updatedMessages = [...prev];
         updatedMessages[updatedMessages.length - 1] = aiMessage;
         return updatedMessages;
@@ -59,10 +63,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div
-        ref={chatContainerRef}
-        className="flex-1 overflow-y-auto pb-32 pt-4"
-      >
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto pb-32 pt-4">
         <div className="max-w-3xl mx-auto px-4">
           {messages.map((msg, index) => (
             <div
@@ -104,13 +105,16 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 w-full" style={{ backgroundColor: '#111827' }}>
+      <div
+        className="fixed bottom-0 w-full"
+        style={{ backgroundColor: "#111827" }}
+      >
         <div className="max-w-3xl mx-auto pb-4">
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 items-center relative">
             <textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onChange={e => setMessage(e.target.value)}
+              onKeyDown={handleKeyPress}
               placeholder="Type your message..."
               rows={3}
               className="flex-1 rounded-xl border border-gray-700 bg-[#1F2937] text-gray-100 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent placeholder-gray-400 resize-none"
@@ -118,9 +122,9 @@ export default function Home() {
             <button
               onClick={handleSend}
               disabled={isLoading || isButtonDisabled}
-              className="bg-cyan-600 text-white px-5 py-3 rounded-xl hover:bg-cyan-700 transition-all disabled:bg-cyan-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-3 bottom-3 w-10 h-10 bg-cyan-600 text-white p-3 rounded-full hover:bg-cyan-700 transition-all disabled:bg-cyan-600 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              {isLoading ? "Sending..." : "Send"}
+              <i className={`fa-solid ${isLoading ? 'fa-square' : 'fa-arrow-up-long'} w-4 h-4`}></i>
             </button>
           </div>
         </div>
