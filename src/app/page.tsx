@@ -21,9 +21,8 @@ export default function Home() {
 
   const chatContainerRef = useRef<null | HTMLDivElement>(null);
 
-  // Update isButtonDisabled based on whether the message is empty
   useEffect(() => {
-    setIsButtonDisabled(!message.trim() || isLoading); // Disable if message is empty or loading
+    setIsButtonDisabled(!message.trim() || isLoading);
   }, [message, isLoading]);
 
   const handleSend = async () => {
