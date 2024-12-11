@@ -81,7 +81,7 @@ export default function Home() {
       handleSend();
     }
   };
-  // console.log(messages)
+
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       <div className="w-full bg-gray-800 border-b border-gray-700 p-4">
