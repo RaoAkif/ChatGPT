@@ -29,7 +29,7 @@ export default function Home() {
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
     setIsLoading(true);
-    setIsButtonDisabled(true); // Disable the send button immediately
+    setIsButtonDisabled(true);
 
     setTimeout(async () => {
       const dummyResponse = dummyResponses[Math.floor(Math.random() * dummyResponses.length)];
@@ -40,12 +40,11 @@ export default function Home() {
         const realResponse = { role: "ai" as const, content: "Here's the real AI response!" };
         setMessages((prev) => [...prev, realResponse]);
         setIsLoading(false);
-        setIsButtonDisabled(false); // Re-enable the send button after the AI's response
+        setIsButtonDisabled(false);
       }, 2000);
     }, 5000);
   };
 
-  // Prevent sending message via Enter if button is disabled
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !isButtonDisabled) {
       handleSend();
@@ -70,8 +69,8 @@ export default function Home() {
               <div
                 className={`px-4 py-2 rounded-2xl max-w-[80%] ${
                   msg.role === "ai"
-                    ? "bg-gray-800 border border-gray-700 text-gray-100"
-                    : "bg-cyan-600 text-white ml-auto"
+                    ? "text-gray-100"
+                    : "bg-[#1F2937] text-white ml-auto"
                 }`}
               >
                 {msg.content}
@@ -101,16 +100,16 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 w-full bg-gray-800 border-t border-gray-700 p-4">
-        <div className="max-w-3xl mx-auto">
+      <div className="fixed bottom-0 w-full" style={{ backgroundColor: '#111827' }}>
+        <div className="max-w-3xl mx-auto pb-4">
           <div className="flex gap-3 items-center">
-            <input
-              type="text"
+            <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress} // Use the new key press handler
+              onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent placeholder-gray-400"
+              rows={3}
+              className="flex-1 rounded-xl border border-gray-700 bg-[#1F2937] text-gray-100 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent placeholder-gray-400 resize-none"
             />
             <button
               onClick={handleSend}
