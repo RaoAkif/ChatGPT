@@ -64,7 +64,7 @@ export default function Home() {
       </div>
 
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto pb-32 pt-4">
-        <div className="max-w-3xl mx-auto px-4">
+        <div className="max-w-3xl mx-auto px-4 pr-0">
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -72,7 +72,6 @@ export default function Home() {
             >
               {msg.role === "ai" && (
                 <div className="flex items-start">
-                  {/* AI Icon */}
                   <div className="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
