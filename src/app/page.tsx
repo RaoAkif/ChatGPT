@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 
 type Message = {
@@ -7,52 +6,55 @@ type Message = {
   content: string;
 };
 
+const dummyResponses = [
+  "I’m thinking... Let me calculate that for you!",
+  "Hold on a second, I’m processing your request.",
+  "Please wait while I find the right answer.",
+  "Almost there, let me figure this out!",
+  "Just a moment, I’ll have the answer soon.",
+];
+
 export default function Home() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", content: "Hello! How can I help you today?" },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleSend = async () => {
     if (!message.trim()) return;
 
     // Add user message to the conversation
     const userMessage = { role: "user" as const, content: message };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setMessage("");
     setIsLoading(true);
+    setIsButtonDisabled(true); // Disable the send button
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message }),
-      });
+    // Simulate AI thinking for 5 seconds
+    setTimeout(async () => {
+      // After 5 seconds, add a dummy response
+      const dummyResponse = dummyResponses[Math.floor(Math.random() * dummyResponses.length)];
+      const aiMessage = { role: "ai" as const, content: dummyResponse };
+      setMessages((prev) => [...prev, aiMessage]);
 
-      // TODO: Handle the response from the chat API to display the AI response in the UI
-
-
-
-
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
+      // Simulate real AI response after the thinking message
+      setTimeout(() => {
+        const realResponse = { role: "ai" as const, content: "Here's the real AI response!" };
+        setMessages((prev) => [...prev, realResponse]);
+        setIsLoading(false);
+        setIsButtonDisabled(false); // Re-enable the send button
+      }, 2000); // Real response delay
+    }, 5000); // Thinking delay of 5 seconds
   };
 
-
-  // TODO: Modify the color schemes, fonts, and UI as needed for a good user experience
-  // Refer to the Tailwind CSS docs here: https://tailwindcss.com/docs/customizing-colors, and here: https://tailwindcss.com/docs/hover-focus-and-other-states
   return (
-    <div className="flex flex-col h-screen bg-gray-900">
+    <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
       {/* Header */}
       <div className="w-full bg-gray-800 border-b border-gray-700 p-4">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-xl font-semibold text-white">Chat</h1>
+          <h1 className="text-2xl font-bold text-white">Chat</h1>
         </div>
       </div>
 
@@ -62,11 +64,7 @@ export default function Home() {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex gap-4 mb-4 ${
-                msg.role === "ai"
-                  ? "justify-start"
-                  : "justify-end flex-row-reverse"
-              }`}
+              className={`flex gap-4 mb-4 ${msg.role === "ai" ? "justify-start" : "justify-end flex-row-reverse"}`}
             >
               <div
                 className={`px-4 py-2 rounded-2xl max-w-[80%] ${
@@ -109,14 +107,14 @@ export default function Home() {
             <input
               type="text"
               value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyPress={e => e.key === "Enter" && handleSend()}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
               placeholder="Type your message..."
               className="flex-1 rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent placeholder-gray-400"
             />
             <button
               onClick={handleSend}
-              disabled={isLoading}
+              disabled={isLoading || isButtonDisabled}
               className="bg-cyan-600 text-white px-5 py-3 rounded-xl hover:bg-cyan-700 transition-all disabled:bg-cyan-800 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Sending..." : "Send"}
