@@ -51,6 +51,25 @@ export default function Home() {
         body: JSON.stringify({ query: message }),
       });
 
+      if (response.status === 429) {
+        const errorData = await response.json();
+        
+        // AI should acknowledge rate limit exceeded
+        const aiMessage = {
+          role: "ai" as const,
+          content: `Rate limit exceeded. Try again in ${errorData.remainingTime} seconds.`,
+        };
+        setMessages((prev) => {
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = aiMessage;
+          return updatedMessages;
+        });
+
+        setIsLoading(false);
+        setIsButtonDisabled(true);
+        return;
+      }
+
       if (!response.ok) {
         throw new Error("Failed to fetch AI response.");
       }
@@ -61,18 +80,16 @@ export default function Home() {
         content: data.data || "No response from AI.",
       };
 
-      console.log(data)
-
       setMessages((prev) => {
         const updatedMessages = [...prev];
         updatedMessages[updatedMessages.length - 1] = aiMessage;
         return updatedMessages;
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error fetching AI response:", error);
       const errorMessage = {
         role: "ai" as const,
-        content: "An error occurred while fetching the response.",
+        content: (error instanceof Error ? error.message : "An error occurred while fetching the response."),
       };
       setMessages((prev) => {
         const updatedMessages = [...prev];
@@ -81,13 +98,15 @@ export default function Home() {
       });
     } finally {
       setIsLoading(false);
-      setIsButtonDisabled(false);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !isButtonDisabled) {
+    if (e.key === "Enter" && !e.shiftKey && !isButtonDisabled) {
+      e.preventDefault();
       handleSend();
+    } else if (e.key === "Enter" && e.shiftKey) {
+      return;
     }
   };
 
