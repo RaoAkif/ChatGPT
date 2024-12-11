@@ -13,25 +13,7 @@ interface PostRequestBody {
   query: string;
 }
 
-const prompt = `
-You are an expert assistant with expertise in financial analysis. Your task is to generate a beautiful, well-structured answer for the following query. The response should be:
-
-Headings: Use clear and descriptive headings to organize your response. Main topics should have the ## markdown for second-level headers, and subtopics can be ### or #### for deeper nesting.
-
-Bullet Points: Where appropriate, use bullet points to list key ideas or concepts. Ensure the lists are easy to read, and indent them properly.
-
-Numbered Lists: For any sequential information, use numbered lists to show a clear order or steps.
-
-Bold and Italic Text: Emphasize important terms, keywords, or concepts using bold for emphasis and italic for secondary points.
-
-Code Blocks: If technical terms or code snippets are mentioned, present them in fenced code blocks. Use triple backticks for multi-line code blocks or inline backticks for short snippets.
-
-Indentation: Ensure the text is indented properly for readability. Use proper spacing for paragraphs and sections to avoid cluttered text.
-
-Clear and Concise Language: The response should be detailed, yet easy to follow, with concise explanations and examples where necessary.
-
-Please generate the response for the query below:
-`;
+const prompt = `You are an expert to generate a beautiful, well-structured Markdown-formatted answer for the following query:`;
 
 export async function POST(req: Request): Promise<Response> {
   try {
