@@ -8,7 +8,7 @@ const ScrollDownButton: React.FC<ScrollDownButtonProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-16 right-4 bg-cyan-600 text-white p-3 rounded-full hover:bg-cyan-700 transition-all"
+      className="fixed bottom-16 right-4 bg-white text-black p-3 rounded-full hover:bg-white transition-all"
     >
       <i className="fa-solid fa-arrow-down-long w-4 h-4"></i>
     </button>

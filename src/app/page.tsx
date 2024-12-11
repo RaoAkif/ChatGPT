@@ -1,9 +1,10 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import ChatButton from "./components/ChatButton"; // Importing ChatButton component
-import ScrollDownButton from "./components/ScrollDownButton"; // Importing ScrollDownButton component
-import AiBotIcon from "./components/AiBotIcon"; // Importing AiBotIcon component
+import ChatButton from "./components/ChatButton";
+import AttachIcon from "./components/AttachIcon";
+import ScrollDownButton from "./components/ScrollDownButton";
+import AiBotIcon from "./components/AiBotIcon";
 
 const BACKEND_URL = "/api/chat";
 
@@ -13,12 +14,17 @@ type Message = {
 };
 
 export default function Home() {
-  const [message, setMessage] = useState(""); // State to hold the user's message
-  const [messages, setMessages] = useState<Message[]>([]); // Start with an empty array
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // Disable button while waiting for response
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const chatContainerRef = useRef<null | HTMLDivElement>(null); // Reference to scroll container
+  const chatContainerRef = useRef<null | HTMLDivElement>(null);
+
+  // Update isButtonDisabled based on whether the message is empty
+  useEffect(() => {
+    setIsButtonDisabled(!message.trim() || isLoading); // Disable if message is empty or loading
+  }, [message, isLoading]);
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -99,7 +105,7 @@ export default function Home() {
     <div className="flex flex-col h-screen bg-[#212121] text-gray-100">
       <div className="w-full bg-[#212121] p-4">
         <div className="mx-auto">
-        <h1 className="text-2xl font-bold text-white text-left">Chat</h1>
+        <h1 className="text-2xl font-bold text-white text-left">ChatFusion</h1>
         </div>
       </div>
 
@@ -145,11 +151,16 @@ export default function Home() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Type your message..."
+              placeholder="Message ChatFusion"
               rows={3}
-              className="flex-1 rounded-xl border bg-[#2F2F2F] text-gray-100 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white-100 focus:border-transparent placeholder-gray-400 resize-none"
+              className="flex-1 rounded-3xl bg-[#2F2F2F] text-gray-100 px-4 py-3 placeholder-gray-400 outline-none"
             />
             <ChatButton
+              onClick={handleSend}
+              isLoading={isLoading}
+              isButtonDisabled={isButtonDisabled}
+            />
+            <AttachIcon
               onClick={handleSend}
               isLoading={isLoading}
               isButtonDisabled={isButtonDisabled}
