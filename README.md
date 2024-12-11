@@ -2,8 +2,7 @@
 
 > BotFusion is a powerful solution designed to provide well-structured, Markdown-formatted answers to user queries. It integrates content scraping, mitigation of hallucinations through citation of sources, and rate-limiting for enhanced scalability and user experience.
 
-![BotFusion](https://github.com/user-attachments/assets/8c57a3f9-7f7e-4ada-a396-6efdd6b97939)
-
+![BotFusion](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
 
 ## Built With
 
