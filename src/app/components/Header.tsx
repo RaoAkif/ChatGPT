@@ -14,7 +14,7 @@ const Header = ({ title, toggleSidebar, isSidebarOpen }: HeaderProps) => (
         className={`fa-solid ${isSidebarOpen ? "" : "fa-list"} text-xl`}
       ></i>
     </button>
-    <h1 className={`text-2xl font-bold -mt-1 text-white text-left ${!isSidebarOpen ? "ml-10" : ""}`}>{title}</h1>
+    <h1 className={`text-lg font-bold -mt-1 text-gray-300 text-left ${!isSidebarOpen ? "ml-10" : ""}`}>{title}</h1>
   </div>
 );
 
