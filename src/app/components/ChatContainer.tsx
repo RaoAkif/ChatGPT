@@ -3,7 +3,7 @@ import ChatMessage from "./ChatMessage";
 interface ChatContainerProps {
   messages: { role: string; content: string }[];
   isLoading: boolean;
-  chatContainerRef: React.RefObject<HTMLDivElement>;
+  chatContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const ChatContainer = ({ messages, isLoading, chatContainerRef }: ChatContainerProps) => (
