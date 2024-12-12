@@ -100,9 +100,7 @@ export default function Home() {
     <div className="flex h-screen bg-[#212121] text-gray-100">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div
-        className={`flex flex-col transition-all duration-300 flex-grow ${
-          isSidebarOpen ? "ml-64" : "ml-0"
-        }`}
+        className={`flex flex-col transition-all duration-300 flex-grow ${isSidebarOpen ? "ml-64" : "ml-0"}`}
       >
         <Header
           title="ChatFusion"
@@ -119,6 +117,7 @@ export default function Home() {
           setMessage={setMessage}
           handleSend={handleSend}
           isButtonDisabled={isButtonDisabled}
+          isSidebarOpen={isSidebarOpen}
         />
         <ScrollDownButton
           onClick={() =>

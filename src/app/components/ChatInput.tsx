@@ -1,10 +1,18 @@
 import ChatButton from "./ChatButton";
 import AttachIcon from "./AttachIcon";
 
-const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled }: any) => (
-  <div className="fixed bottom-0 w-full" style={{ backgroundColor: "#212121" }}>
+type ChatInputProps = {
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  handleSend: () => Promise<void>;
+  isButtonDisabled: boolean;
+  isSidebarOpen: boolean;
+};
+
+const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled, isSidebarOpen }: ChatInputProps) => (
+  <div className={`fixed bottom-0 w-full`} style={{ backgroundColor: "#212121" }}>
     <div className="max-w-3xl mx-auto pb-4">
-      <div className="flex gap-3 items-center relative">
+      <div className="flex gap-3 items-center relative transition-all ease-in-out duration-300" style={{ marginRight: isSidebarOpen ? "119px" : "0", marginLeft: isSidebarOpen ? "-132px" : "0" }}>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
