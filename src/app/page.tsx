@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import ChatContainer from "./components/ChatContainer";
 import ChatInput from "./components/ChatInput";
 import ScrollDownButton from "./components/ScrollDownButton";
+import Sidebar from "./components/Sidebar";
 
 const BACKEND_URL = "/api/chat";
 
@@ -17,6 +18,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const chatContainerRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,16 +97,38 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#212121] text-gray-100">
-      <Header title="ChatFusion" />
-      <ChatContainer messages={messages} isLoading={isLoading} chatContainerRef={chatContainerRef} />
-      <ChatInput
-        message={message}
-        setMessage={setMessage}
-        handleSend={handleSend}
-        isButtonDisabled={isButtonDisabled}
-      />
-      <ScrollDownButton onClick={() => chatContainerRef.current?.scrollTo({ top: chatContainerRef.current.scrollHeight, behavior: "smooth" })} />
+    <div className="flex h-screen bg-[#212121] text-gray-100">
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <div
+        className={`flex flex-col transition-all duration-300 flex-grow ${
+          isSidebarOpen ? "ml-64" : "ml-0"
+        }`}
+      >
+        <Header
+          title="ChatFusion"
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          isSidebarOpen={isSidebarOpen}
+        />
+        <ChatContainer
+          messages={messages}
+          isLoading={isLoading}
+          chatContainerRef={chatContainerRef}
+        />
+        <ChatInput
+          message={message}
+          setMessage={setMessage}
+          handleSend={handleSend}
+          isButtonDisabled={isButtonDisabled}
+        />
+        <ScrollDownButton
+          onClick={() =>
+            chatContainerRef.current?.scrollTo({
+              top: chatContainerRef.current.scrollHeight,
+              behavior: "smooth",
+            })
+          }
+        />
+      </div>
     </div>
   );
 }
