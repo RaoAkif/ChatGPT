@@ -7,8 +7,8 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-const RATE_LIMIT_WINDOW = 60;
-const MAX_REQUESTS = 10;
+const RATE_LIMIT_WINDOW = 600;
+const MAX_REQUESTS = 100;
 
 export async function middleware(request: NextRequest) {
   const ip = request.headers.get("x-real-ip") || request.headers.get("x-forwarded-for") || "unknown";

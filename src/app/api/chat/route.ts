@@ -9,7 +9,7 @@ interface PostRequestBody {
   query: string;
 }
 
-const prompt = `You are an expert to generate a beautiful, well-structured Markdown-formatted answer for the following query:`;
+const prompt = `You provide well-structured Markdown-formatted answer for the following query:`;
 
 async function fetchHTML(url: string): Promise<string> {
   const browser = await puppeteer.launch();
