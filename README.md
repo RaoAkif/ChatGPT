@@ -16,9 +16,7 @@
 
 ## Live Demo
 
-[Live Site](https://bot-fusion.vercel.app/)
-
----
+[Live Site](https://chatbot-fusion.vercel.app/)
 
 ## Getting Started
 
