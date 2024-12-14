@@ -16,7 +16,7 @@ You are tasked with generating a Markdown document. Ensure:
 - Avoid duplicating content or breaking list formatting.
 `;
 
-export const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9()@:%.~#?&//=]*)/;
+const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9()@:%.~#?&//=]*)/;
 
 // Utility function to clean and format Markdown
 function cleanMarkdown(response: string): string {
