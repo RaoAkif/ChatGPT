@@ -63,7 +63,7 @@ export default function Home() {
             return;
         }
 
-        if (!response.ok) throw new Error("Failed to fetch AI response.");
+        if (!response.ok) throw new Error(response.statusText);
 
         const data = await response.json();
         const aiMessage = {
