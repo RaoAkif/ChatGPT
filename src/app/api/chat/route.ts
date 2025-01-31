@@ -1,4 +1,4 @@
-import Groq from "groq-sdk"; 
+import Groq from "groq-sdk";
 import { extractUrls, fetchScrapedContent } from "../utils/urlUtils";
 import { VALID_MODELS, ValidModel, DEFAULT_MODEL } from "../utils/models";
 
@@ -21,15 +21,20 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Validate the selected model and default to DEFAULT_MODEL if invalid
-    const selectedModel: ValidModel = VALID_MODELS.includes(model as ValidModel) ? (model as ValidModel) : DEFAULT_MODEL;
+    // Extract all valid model values into an array for easy checking
+    const validModelValues: ValidModel[] = VALID_MODELS.map((m) => m.value);
+
+    // Check if the provided model exists in the valid models
+    const selectedModel: ValidModel = validModelValues.includes(model as ValidModel)
+      ? (model as ValidModel)
+      : DEFAULT_MODEL;
 
     const urls = extractUrls(query);
     const scrapedContent = urls.length > 0 ? await fetchScrapedContent(urls[0]) : "";
 
     const academicResponse = await groq.chat.completions
       .create({
-        model: selectedModel,  // ✅ Now dynamically selected
+        model: selectedModel,
         messages: [
           { role: "system", content: "You are an advanced AI assistant providing expert-level responses." },
           { role: "user", content: `${query.trim()} ${scrapedContent}` },

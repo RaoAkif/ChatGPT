@@ -1,4 +1,3 @@
-// Define the valid models that Groq supports with short descriptions
 export const VALID_MODELS = [
     {
       label: "DeepSeek R1 Distill (70B)",
@@ -32,8 +31,6 @@ export const VALID_MODELS = [
     },
 ] as const;
 
-// Define a type that enforces only the listed models
 export type ValidModel = typeof VALID_MODELS[number]['value'];
 
-// Default model (Ensure it's one of the supported types)
 export const DEFAULT_MODEL: ValidModel = "llama-3.3-70b-versatile";
