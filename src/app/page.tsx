@@ -22,8 +22,8 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState<ValidModel>(DEFAULT_MODEL);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // State to track if the chat container is scrollable
   const [isScrollable, setIsScrollable] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(true);
 
   const isButtonDisabled = !message.trim() || isLoading;
 
@@ -42,7 +42,9 @@ export default function Home() {
     setMessages((prev) => [...prev, temporaryResponse]);
 
     try {
-      const conversationHistory = messages.map((msg) => `${msg.role}: ${msg.content}`).join("\n");
+      const conversationHistory = messages
+        .map((msg) => `${msg.role}: ${msg.content}`)
+        .join("\n");
       const fullQuery = `${conversationHistory}\nuser: ${message}`;
 
       const response = await fetch(BACKEND_URL, {
@@ -92,23 +94,46 @@ export default function Home() {
     }
   };
 
-  // Function to check if the chat container is scrollable
-  const checkScrollable = () => {
+  // Function to check if the chat container is scrollable and if at bottom
+  const handleScroll = () => {
     const container = chatContainerRef.current;
     if (container) {
-      setIsScrollable(container.scrollHeight > container.clientHeight);
+      const isScrollableNow = container.scrollHeight > container.clientHeight;
+      setIsScrollable(isScrollableNow);
+
+      // Adding a tolerance of 5px to account for minor discrepancies
+      const isBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight < 5;
+      setIsAtBottom(isBottom);
     }
   };
 
-  // Check scrollability on messages change and window resize
+  // Check scrollability and position on messages change
   useEffect(() => {
-    checkScrollable();
+    handleScroll();
+    
+    // If the user was at the bottom, scroll to the new bottom
+    if (isAtBottom) {
+      chatContainerRef.current?.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
+  // Add scroll event listener
   useEffect(() => {
-    window.addEventListener("resize", checkScrollable);
+    const container = chatContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      // Initial check
+      handleScroll();
+    }
     return () => {
-      window.removeEventListener("resize", checkScrollable);
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
@@ -142,7 +167,7 @@ export default function Home() {
           isSidebarOpen={isSidebarOpen}
         />
         {/* Conditionally render the ScrollDownButton */}
-        {isScrollable && (
+        {isScrollable && !isAtBottom && (
           <ScrollDownButton
             onClick={() =>
               chatContainerRef.current?.scrollTo({
