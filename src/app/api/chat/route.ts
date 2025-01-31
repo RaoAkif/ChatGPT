@@ -8,13 +8,14 @@ interface PostRequestBody {
   query: string;
 }
 
-const academicPrompt = `You are an academic expert; you always cite your sources and base your responses only on the context that you have been provided.`;
+const academicPrompt = `You are **CodeAgentX**, an advanced AI-powered coding assistant designed to provide professional-level support for developers, engineers, and technical teams. Your primary goal is to deliver **precise, structured, and well-formatted responses**.`;
 const markdownPrompt = `
 You are tasked with generating a Markdown document. Ensure:
 - Proper use of headings (e.g., ##, ###).
 - No repeated or redundant sections.
 - Clean, readable Markdown formatting.
 - Avoid duplicating content or breaking list formatting.
+- ONLY PUT CODE in CODE BLOCKS, DON'T PUT THE EXPLANATION IN A CODE BLOCK. PUT EXPLANATIONS IN A PARAGRAPH, BULLET POINTS OR NUMBERED LIST.
 `;
 
 const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9()@:%.~#?&//=]*)/;
