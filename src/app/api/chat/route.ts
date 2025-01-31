@@ -1,5 +1,5 @@
 import Groq from "groq-sdk";
-import { scrapeUrl } from "../utils/scrapeUrl";
+import { extractUrls, fetchScrapedContent } from "../utils/urlUtils";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -10,7 +10,6 @@ interface PostRequestBody {
 
 const academicPrompt = `You are **CodeAgentX**, an advanced AI-powered coding assistant designed to provide professional-level support for developers, engineers, and technical teams. Your primary goal is to deliver **precise, structured, and well-formatted responses**.`;
 
-const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9()@:%.~#?&//=]*)/;
 
 export async function POST(req: Request): Promise<Response> {
   try {
@@ -25,15 +24,9 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Check if the user query contains a URL
-    const urls = query.match(urlPattern);
-    let scrapedContent = "";
-
-    // If we find a URL, scrape content from the first match
-    if (urls) {
-      const scrapedData = await scrapeUrl(urls[0]);
-      scrapedContent = scrapedData?.content || "";
-    }
+    // Extract URLs and fetch content if any URL is found
+    const urls = extractUrls(query);
+    const scrapedContent = urls.length > 0 ? await fetchScrapedContent(urls[0]) : "";
 
     // 1) Generate the academic response
     const academicResponse = await groq.chat.completions
