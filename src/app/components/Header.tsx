@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { VALID_MODELS, ValidModel, DEFAULT_MODEL } from "../../app/api/utils/models";
+import {
+  VALID_MODELS,
+  ValidModel,
+  DEFAULT_MODEL,
+} from "../../app/api/utils/models";
 
 interface HeaderProps {
   selectedModel: ValidModel;
@@ -8,13 +12,21 @@ interface HeaderProps {
   isSidebarOpen: boolean;
 }
 
-const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen }: HeaderProps) => {
+const Header = ({
+  selectedModel,
+  setSelectedModel,
+  toggleSidebar,
+  isSidebarOpen,
+}: HeaderProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -24,17 +36,22 @@ const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen 
 
   // Ensure `DEFAULT_MODEL` is used when no model is selected
   useEffect(() => {
-    if (!VALID_MODELS.some((model) => model.value === selectedModel)) {
+    if (!VALID_MODELS.some(model => model.value === selectedModel)) {
       setSelectedModel(DEFAULT_MODEL);
     }
   }, [selectedModel, setSelectedModel]);
 
-  const selectedModelLabel = VALID_MODELS.find((model) => model.value === selectedModel)?.label || "Select a model";
+  const selectedModelLabel =
+    VALID_MODELS.find(model => model.value === selectedModel)?.label ||
+    "Select a model";
 
   return (
     <div className="w-full bg-[#212121] p-4 flex items-center space-x-4 relative">
       {/* Sidebar Toggle */}
-      <button onClick={toggleSidebar} className="text-gray-400 hover:text-gray-200">
+      <button
+        onClick={toggleSidebar}
+        className="text-gray-400 hover:text-gray-200"
+      >
         <i className={`fa-solid ${isSidebarOpen ? "" : "fa-list"} text-xl`}></i>
       </button>
 
@@ -42,7 +59,7 @@ const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen 
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="px-4 py-2 bg-[#212121] text-white rounded-lg flex items-center space-x-2 hover:bg-[#2F2F2F] border border-gray-700"
+          className="px-4 py-2 bg-[#212121] text-[#B4B4B4] font-bold rounded-lg flex items-center space-x-2 hover:bg-[#2F2F2F] border border-gray-700"
         >
           <span>{selectedModelLabel}</span>
           <i className="fa-solid fa-chevron-down text-sm"></i>
@@ -51,23 +68,32 @@ const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen 
         {/* Dropdown Menu */}
         {isDropdownOpen && (
           <div className="absolute left-0 mt-2 w-72 bg-[#2F2F2F] border border-gray-700 rounded-lg shadow-lg z-50 text-white">
-            <div className="p-3 text-sm font-semibold text-gray-400 border-b border-gray-600">Model</div>
-            {VALID_MODELS.map((model) => (
+            <div className="p-3 text-sm font-semibold text-gray-400 border-b border-gray-600">
+              Model
+            </div>
+            {VALID_MODELS.map(model => (
               <button
                 key={model.value}
-                className={`w-full text-left px-4 py-3 flex flex-col hover:bg-[#424242] transition-all ${
-                  selectedModel === model.value ? "bg-[#424242]" : ""
+                className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-[#2F2F2F] transition-all ${
+                  selectedModel === model.value
+                    ? "bg-[#343434] font-semibold"
+                    : ""
                 }`}
                 onClick={() => {
                   setSelectedModel(model.value);
                   setIsDropdownOpen(false);
                 }}
               >
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col">
                   <span className="text-sm font-medium">{model.label}</span>
-                  {selectedModel === model.value && <i className="fa-solid fa-check text-sm pl-4"></i>}
+                  <span className="text-xs text-gray-400">
+                    {model.description}
+                  </span>
                 </div>
-                <span className="text-xs text-gray-400">{model.description}</span>
+
+                {selectedModel === model.value && (
+                  <i className="fa-solid fa-circle-check text-sm text-white"></i> // ✅ Tick on the right side
+                )}
               </button>
             ))}
           </div>
