@@ -12,7 +12,7 @@ const ChatButton: React.FC<ChatButtonProps> = ({ onClick, isLoading, isButtonDis
     <button
       onClick={onClick}
       disabled={isLoading || isButtonDisabled}
-      className={`absolute right-3 bottom-3 w-8 h-8 bg-white text-black p-3 mr-4 rounded-full hover:bg-white transition-all ${
+      className={`absolute right-8 bottom-3 w-8 h-8 bg-white text-black p-3 mr-4 rounded-full hover:bg-white transition-all ${
         (isLoading || isButtonDisabled) ? 'opacity-50 cursor-not-allowed' : ''
       } flex items-center justify-center`}
     >

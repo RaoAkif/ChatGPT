@@ -1,8 +1,7 @@
 import { useRef, useEffect } from "react";
-import ChatButton from "./ChatButton";
-import AttachIcon from "./AttachIcon";
+import ChatInputButtons from "./ChatInputButtons";
 
-type ChatInputProps = {
+ type ChatInputProps = {
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   handleSend: () => Promise<void>;
@@ -63,12 +62,7 @@ const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled, isSideba
               style={{ minHeight: "48px", maxHeight: "210px", overflow: "hidden", scrollbarWidth: "none" }}
             />
           </div>
-
-          {/* Buttons Section */}
-          <div className="flex items-center gap-2 pb-2">
-            <AttachIcon isLoading={false} />
-            <ChatButton onClick={handleSend} isLoading={false} isButtonDisabled={isButtonDisabled} />
-          </div>
+          <ChatInputButtons handleSend={handleSend} isButtonDisabled={isButtonDisabled} />
         </div>
       </div>
     </div>
