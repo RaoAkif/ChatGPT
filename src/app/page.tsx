@@ -5,6 +5,7 @@ import ChatContainer from "./components/ChatContainer";
 import ChatInput from "./components/ChatInput";
 import ScrollDownButton from "./components/ScrollDownButton";
 import Sidebar from "./components/Sidebar";
+import { DEFAULT_MODEL, ValidModel } from "../app/api/utils/models";
 
 const BACKEND_URL = "/api/chat";
 
@@ -18,6 +19,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<ValidModel>(DEFAULT_MODEL);
   const chatContainerRef = useRef<null | HTMLDivElement>(null);
 
   const isButtonDisabled = !message.trim() || isLoading;
@@ -31,95 +33,64 @@ export default function Home() {
     setIsLoading(true);
 
     const temporaryResponse = {
-        role: "ai" as const,
-        content: "",
+      role: "ai" as const,
+      content: "",
     };
     setMessages((prev) => [...prev, temporaryResponse]);
 
     try {
-        // Prepare the entire conversation for context
-        const conversationHistory = messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
-        const fullQuery = `${conversationHistory}\nuser: ${message}`;
+      const conversationHistory = messages.map((msg) => `${msg.role}: ${msg.content}`).join("\n");
+      const fullQuery = `${conversationHistory}\nuser: ${message}`;
 
-        const response = await fetch(BACKEND_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ query: fullQuery }),
-        });
+      const response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: fullQuery, model: selectedModel }),
+      });
 
-        if (response.status === 429) {
-            const errorData = await response.json();
-            const aiMessage = {
-                role: "ai" as const,
-                content: `Rate limit exceeded. Try again in ${errorData.remainingTime} seconds.`,
-            };
-            setMessages((prev) => {
-                const updatedMessages = [...prev];
-                updatedMessages[updatedMessages.length - 1] = aiMessage;
-                return updatedMessages;
-            });
-            return;
-        }
-
-        if (!response.ok) throw new Error(response.statusText);
-
-        const data = await response.json();
-        const aiMessage = {
-            role: "ai" as const,
-            content: data.data || "No response from AI.",
-        };
-
+      if (response.status === 429) {
+        const errorData = await response.json();
         setMessages((prev) => {
-            const updatedMessages = [...prev];
-            updatedMessages[updatedMessages.length - 1] = aiMessage;
-            return updatedMessages;
+          const updatedMessages = [...prev];
+          updatedMessages[updatedMessages.length - 1] = {
+            role: "ai",
+            content: `Rate limit exceeded. Try again in ${errorData.remainingTime} seconds.`,
+          };
+          return updatedMessages;
         });
+        return;
+      }
+
+      if (!response.ok) throw new Error(response.statusText);
+
+      const data = await response.json();
+      setMessages((prev) => {
+        const updatedMessages = [...prev];
+        updatedMessages[updatedMessages.length - 1] = { role: "ai", content: data.data || "No response from AI." };
+        return updatedMessages;
+      });
     } catch (error: unknown) {
-        const errorMessage = {
-            role: "ai" as const,
-            content: error instanceof Error ? error.message : "An error occurred while fetching the response.",
+      setMessages((prev) => {
+        const updatedMessages = [...prev];
+        updatedMessages[updatedMessages.length - 1] = {
+          role: "ai",
+          content: error instanceof Error ? error.message : "An error occurred while fetching the response.",
         };
-        setMessages((prev) => {
-            const updatedMessages = [...prev];
-            updatedMessages[updatedMessages.length - 1] = errorMessage;
-            return updatedMessages;
-        });
+        return updatedMessages;
+      });
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-};
+  };
 
   return (
     <div className="flex h-screen bg-[#212121] text-gray-100">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className={`flex flex-col transition-all duration-300 flex-grow ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
-        <Header
-          title="ChatFusion"
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          isSidebarOpen={isSidebarOpen}
-        />
-        <ChatContainer
-          messages={messages}
-          isLoading={isLoading}
-          chatContainerRef={chatContainerRef}
-        />
-        <ChatInput
-          message={message}
-          setMessage={setMessage}
-          handleSend={handleSend}
-          isButtonDisabled={isButtonDisabled}
-          isSidebarOpen={isSidebarOpen}
-        />
-        <ScrollDownButton
-          onClick={() =>
-            chatContainerRef.current?.scrollTo({
-              top: chatContainerRef.current.scrollHeight,
-              behavior: "smooth",
-            })
-          }
-        />
+        <Header selectedModel={selectedModel} setSelectedModel={setSelectedModel} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
+        <ChatContainer messages={messages} isLoading={isLoading} chatContainerRef={chatContainerRef} />
+        <ChatInput message={message} setMessage={setMessage} handleSend={handleSend} isButtonDisabled={isButtonDisabled} isSidebarOpen={isSidebarOpen} />
+        <ScrollDownButton onClick={() => chatContainerRef.current?.scrollTo({ top: chatContainerRef.current.scrollHeight, behavior: "smooth" })} />
       </div>
     </div>
   );
