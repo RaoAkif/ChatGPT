@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight"; 
+import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import "./ChatMessage.css";
 import AiBotIcon from "./AiBotIcon";
@@ -17,7 +17,7 @@ interface ChatMessageProps {
 const ChatMessage = ({ msg, isLoading }: ChatMessageProps) => (
   <div
     className={`flex gap-4 mb-16 items-start ${
-      msg.role === "ai" ? "justify-start" : "justify-end flex-row-reverse"
+      msg.role === "ai" ? "justify-start" : "flex-row-reverse"
     }`}
   >
     {msg.role === "ai" && <AiBotIcon />}
@@ -29,10 +29,10 @@ const ChatMessage = ({ msg, isLoading }: ChatMessageProps) => (
         fontFamily: "Inter, sans-serif",
         lineHeight: "1.7em",
       }}
-      className={`px-4 py-2 rounded-2xl ${
+      className={`px-4 py-2 rounded-2xl max-w-[95%] ${
         msg.role === "ai"
-          ? "text-[#ECECEC]" 
-          : "text-[#ECECEC] ml-auto max-w-[95%]"
+          ? "text-[#ECECEC]"
+          : "text-[#ECECEC] bg-[#303030] flex"
       }`}
     >
       {/* Render Markdown with GFM and syntax highlighting */}

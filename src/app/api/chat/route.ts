@@ -9,35 +9,8 @@ interface PostRequestBody {
 }
 
 const academicPrompt = `You are **CodeAgentX**, an advanced AI-powered coding assistant designed to provide professional-level support for developers, engineers, and technical teams. Your primary goal is to deliver **precise, structured, and well-formatted responses**.`;
-const markdownPrompt = `
-You are tasked with generating a Markdown document. Ensure:
-- Proper use of headings (e.g., ##, ###).
-- No repeated or redundant sections.
-- Clean, readable Markdown formatting.
-- Avoid duplicating content or breaking list formatting.
-- ONLY PUT CODE in CODE BLOCKS, DON'T PUT THE EXPLANATION IN A CODE BLOCK. PUT EXPLANATIONS IN A PARAGRAPH, BULLET POINTS OR NUMBERED LIST.
-`;
 
 const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([a-zA-Z0-9()@:%.~#?&//=]*)/;
-
-/**
- * Utility function to clean and format Markdown output.
- * - Removes duplicate lines
- * - Trims spaces
- * - Ensures proper spacing between sections
- */
-function cleanMarkdown(response: string): string {
-  return response
-    .split("\n") // Split into lines
-    .filter((line, idx, arr) => {
-      const trimmed = line.trim();
-      // Keep only unique trimmed lines (avoids accidental duplicates)
-      return trimmed !== "" && arr.indexOf(trimmed) === idx;
-    })
-    .map((line) => line.trim())
-    .join("\n")
-    .replace(/\n{2,}/g, "\n\n");
-}
 
 export async function POST(req: Request): Promise<Response> {
   try {
@@ -73,22 +46,8 @@ export async function POST(req: Request): Promise<Response> {
       })
       .then((chatCompletion) => chatCompletion.choices?.[0]?.message?.content || "");
 
-    // 2) Generate the Markdown response
-    const markdownResponse = await groq.chat.completions
-      .create({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: markdownPrompt },
-          { role: "user", content: academicResponse },
-        ],
-      })
-      .then((chatCompletion) => chatCompletion.choices?.[0]?.message?.content || "");
-
-    // Clean the Markdown output
-    const cleanedMarkdown = cleanMarkdown(markdownResponse);
-
     return new Response(
-      JSON.stringify({ data: cleanedMarkdown }),
+      JSON.stringify({ data: academicResponse }),
       {
         status: 200,
         headers: { "Content-Type": "application/json" },

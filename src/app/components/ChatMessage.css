@@ -1,10 +1,106 @@
-/* ChatMessage.css */
+/* Paragraphs */
+p {
+  margin: 10px 0;
+  line-height: 1.7em;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin: 16px 0 10px;
+  line-height: 1.3em;
+}
+
+h1 {
+  font-size: 2.5em; /* 40px */
+}
+
+h2 {
+  font-size: 2em; /* 32px */
+}
+
+h3 {
+  font-size: 1.75em; /* 28px */
+}
+
+h4 {
+  font-size: 1.5em; /* 24px */
+}
+
+h5 {
+  font-size: 1.25em; /* 20px */
+}
+
+h6 {
+  font-size: 1.1em; /* 18px */
+  font-weight: 600;
+}
+/* Links */
+a {
+  color: #007BFF;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+/* Code Blocks */
+code {
+  background-color: #424242;
+  padding: 0.15em 0.3em;
+  border-radius: 5px;
+  font-family: monospace;
+}
+
+/* Code Blocks */
 code.hljs {
-    /* display: block;
-    overflow-x: auto;
-    padding: 1em; */
-    border-radius: 10px;
-    /* max-width: 95%;
-    margin-left: auto;
-    margin-right: auto; */
-  }
+  /* background-color: #f4f4f4; */
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-family: monospace;
+}
+
+pre {
+  /* background-color: #f4f4f4; */
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: monospace;
+}
+
+/* Blockquote */
+blockquote {
+  margin: 16px 0;
+  padding: 10px 20px;
+  border-left: 5px solid #007BFF;
+  background: #f2f2f2;
+  color: #555;
+}
+
+/* Lists */
+ul, ol {
+  margin: 16px 0;
+  padding-left: 20px;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  margin-bottom: 6px;
+  line-height: 1.6em;
+}
+
+/* Nested lists */
+ul ul, ol ol, ul ol, ol ul {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 20px;
+}
