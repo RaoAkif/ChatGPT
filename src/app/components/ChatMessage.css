@@ -1,10 +1,8 @@
-/* Paragraphs */
 p {
   margin: 10px 0;
   line-height: 1.7em;
 }
 
-/* Headings */
 h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin: 16px 0 10px;
@@ -12,30 +10,30 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2.5em; /* 40px */
+  font-size: 2.5em;
 }
 
 h2 {
-  font-size: 2em; /* 32px */
+  font-size: 2em;
 }
 
 h3 {
-  font-size: 1.75em; /* 28px */
+  font-size: 1.75em;
 }
 
 h4 {
-  font-size: 1.5em; /* 24px */
+  font-size: 1.5em;
 }
 
 h5 {
-  font-size: 1.25em; /* 20px */
+  font-size: 1.25em;
 }
 
 h6 {
-  font-size: 1.1em; /* 18px */
+  font-size: 1.1em;
   font-weight: 600;
 }
-/* Links */
+
 a {
   color: #007BFF;
   text-decoration: none;
@@ -46,7 +44,6 @@ a:hover {
   color: #0056b3;
 }
 
-/* Code Blocks */
 code {
   background-color: #424242;
   padding: 0.15em 0.3em;
@@ -54,23 +51,19 @@ code {
   font-family: monospace;
 }
 
-/* Code Blocks */
 code.hljs {
-  /* background-color: #f4f4f4; */
   padding: 4px 8px;
   border-radius: 5px;
   font-family: monospace;
 }
 
 pre {
-  /* background-color: #f4f4f4; */
   padding: 16px;
   border-radius: 10px;
   overflow-x: auto;
   font-family: monospace;
 }
 
-/* Blockquote */
 blockquote {
   margin: 16px 0;
   padding: 10px 20px;
@@ -79,7 +72,6 @@ blockquote {
   color: #555;
 }
 
-/* Lists */
 ul, ol {
   margin: 16px 0;
   padding-left: 20px;
@@ -98,9 +90,39 @@ li {
   line-height: 1.6em;
 }
 
-/* Nested lists */
 ul ul, ol ol, ul ol, ol ul {
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 20px;
+}
+
+/* ChatMessage.css */
+.prose code {
+  background-color: #424242;
+  padding: 0.15em 0.3em;
+  border-radius: 5px;
+  font-family: monospace;
+}
+
+.prose pre {
+  position: relative;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: monospace;
+}
+
+.prose pre button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.prose pre button:hover {
+  opacity: 0.7;
 }
