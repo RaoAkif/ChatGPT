@@ -1,5 +1,6 @@
 import React from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
 interface ScrollDownButtonProps {
   onClick: () => void;
 }
@@ -9,6 +10,7 @@ const ScrollDownButton: React.FC<ScrollDownButtonProps> = ({ onClick }) => {
     <button
       onClick={onClick}
       className="fixed bottom-16 right-4 bg-white text-black px-3 py-2 rounded-full hover:bg-white transition-all"
+      aria-label="Scroll Down"
     >
       <i className="fa-solid fa-arrow-down-long w-4 h-4"></i>
     </button>
