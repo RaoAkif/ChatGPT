@@ -8,7 +8,7 @@ interface ChatContainerProps {
 
 const ChatContainer = ({ messages, isLoading, chatContainerRef }: ChatContainerProps) => (
   <div ref={chatContainerRef} className="flex-1 overflow-y-auto pb-32 pt-4">
-    <div className="max-w-3xl mx-auto px-4 pr-0">
+    <div className="max-w-[50%] mx-auto">
       {messages.map((msg: { role: string; content: string }, index: number) => (
         <ChatMessage key={index} msg={msg} isLoading={isLoading} />
       ))}
