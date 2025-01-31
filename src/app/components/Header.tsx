@@ -46,7 +46,7 @@ const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen 
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="px-4 py-2 bg-[#212121] text-[#B4B4B4] font-bold rounded-lg flex items-center space-x-2 hover:bg-[#2F2F2F] "
+          className="px-4 py-2 bg-[#212121] text-[#B4B4B4] font-bold rounded-lg flex items-center space-x-2 hover:bg-[#2F2F2F]"
         >
           <span>{selectedModelLabel}</span>
           <i className="fa-solid fa-chevron-down text-sm"></i>
@@ -61,11 +61,12 @@ const Header = ({ selectedModel, setSelectedModel, toggleSidebar, isSidebarOpen 
             {VALID_MODELS.map(model => (
               <button
                 key={model.value}
-                className={`w-full text-left px-4 py-3 flex items-center justify-between transition-all ${
-                  selectedModel === model.value
-                    ? "text-white font-extralight"  // ✅ Selected model: White text
-                    : "text-gray-300 font-bold hover:text-white hover:bg-[#424242]" // ✅ Non-selected: Gray text, turns white on hover
-                }`}
+                className={`w-full text-left px-4 py-3 flex items-center justify-between transition-all
+                  ${
+                    selectedModel === model.value
+                      ? "text-white font-semibold hover:bg-[#424242]"  // ✅ Selected model: White text, but still gets hover effect
+                      : "text-gray-300 font-bold hover:text-white hover:bg-[#424242]" // ✅ Non-selected: Gray text, turns white on hover
+                  }`}
                 onClick={() => {
                   setSelectedModel(model.value);
                   setIsDropdownOpen(false);
