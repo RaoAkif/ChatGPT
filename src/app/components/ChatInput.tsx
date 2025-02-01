@@ -7,37 +7,33 @@ type ChatInputProps = {
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   handleSend: () => Promise<void>;
+  // New prop for handling audio input messages
+  handleAudioSend: (transcribedText: string) => Promise<string | void>;
   isButtonDisabled: boolean;
   isSidebarOpen: boolean;
 };
 
-const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled, isSidebarOpen }: ChatInputProps) => {
+const ChatInput = ({
+  message,
+  setMessage,
+  handleSend,
+  handleAudioSend,
+  isButtonDisabled,
+  isSidebarOpen,
+}: ChatInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const inputContainerRef = useRef<HTMLDivElement | null>(null);
-  // state to toggle the audio recording modal
   const [isAudioModalOpen, setIsAudioModalOpen] = useState(false);
 
-  // When the Audio modal finishes recording, this callback is called with the transcribed text.
+  // Modified audio transcription handler
   const handleAudioTranscription = async (transcribedText: string) => {
-    // Optionally, update your conversation with the transcribed text:
-    // For example, you could call a handleSendAudio(transcribedText) function here.
-    // In this example, we mimic the behavior of sending the text to BACKEND_URL and then using TTS.
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: transcribedText }), // you can also include a model if needed
-      });
-
-      if (!response.ok) throw new Error(response.statusText);
-      const data = await response.json();
-      const aiResponseText = data.data || "No response from AI.";
-
-      // Use SpeechSynthesis to speak the AI response
-      const utterance = new SpeechSynthesisUtterance(aiResponseText);
+    // Call the parent's function to send the transcribed text
+    const aiResponse = await handleAudioSend(transcribedText);
+    
+    // Optionally, if you want to speak the AI response as before:
+    if (aiResponse) {
+      const utterance = new SpeechSynthesisUtterance(aiResponse);
       window.speechSynthesis.speak(utterance);
-    } catch (error: unknown) {
-      console.error("Audio API error:", error);
     }
   };
 
@@ -61,12 +57,14 @@ const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled, isSideba
     <>
       <div className="fixed bottom-0 w-full" style={{ backgroundColor: "#212121" }}>
         <div className="max-w-3xl mx-auto pb-4">
-          <div 
-            className="flex gap-3 items-center relative transition-all ease-in-out duration-300" 
-            style={{ marginRight: isSidebarOpen ? "119px" : "0", marginLeft: isSidebarOpen ? "-132px" : "0" }}
+          <div
+            className="flex gap-3 items-center relative transition-all ease-in-out duration-300"
+            style={{
+              marginRight: isSidebarOpen ? "119px" : "0",
+              marginLeft: isSidebarOpen ? "-132px" : "0",
+            }}
           >
-            {/* Scrollable Input Area */}
-            <div 
+            <div
               ref={inputContainerRef}
               className="flex-1 rounded-3xl bg-[#2F2F2F] text-gray-100 px-4 py-3 relative overflow-hidden"
               style={{ height: "90px", paddingLeft: "22px" }}
@@ -84,7 +82,12 @@ const ChatInput = ({ message, setMessage, handleSend, isButtonDisabled, isSideba
                 placeholder="Message ChatFusion"
                 rows={3}
                 className="w-full bg-transparent text-gray-100 placeholder-gray-400 outline-none resize-none"
-                style={{ minHeight: "48px", maxHeight: "210px", overflow: "hidden", scrollbarWidth: "none" }}
+                style={{
+                  minHeight: "48px",
+                  maxHeight: "210px",
+                  overflow: "hidden",
+                  scrollbarWidth: "none",
+                }}
               />
             </div>
             <ChatInputButtons
