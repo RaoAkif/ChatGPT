@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { FaTimes, FaHeart } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 
 type AudioRecordingModalProps = {
   onClose: () => void;
@@ -14,7 +14,6 @@ interface SpeechRecognitionEvent extends Event {
 
 const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalProps) => {
   useEffect(() => {
-    // Check for browser support for the Web Speech API
     const SpeechRecognition =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -27,16 +26,13 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
     recognition.lang = "en-US";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
-    recognition.continuous = false; // one shot per start
+    recognition.continuous = false;
 
-    // Start recognition
     recognition.start();
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
-      // Instead of showing text, just call the transcription callback
       onTranscription(transcript);
-      // We do not close the modal automatically
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,18 +40,13 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
       console.error("Speech recognition error", event.error);
     };
 
-    // When speech recognition ends (silence), we do nothing to allow the user to hear audio feedback.
-    recognition.onend = () => {
-      // Optionally, you could restart recognition here if desired.
-    };
+    recognition.onend = () => {};
 
-    // Clean up on unmount
     return () => {
       recognition.abort();
     };
   }, [onTranscription]);
 
-  // When the close button is clicked, stop any ongoing speech synthesis and then close the modal.
   const handleClose = () => {
     window.speechSynthesis.cancel();
     onClose();
@@ -63,11 +54,18 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center z-50">
-      {/* Center pulsating heart animation */}
-      <div className="w-40 h-40 flex items-center justify-center">
-        <FaHeart className="text-red-500 animate-pulse" size={80} />
+      {/* Pulsating Circle with Moving Background */}
+      <div className="relative w-40 h-40 rounded-full border-4 border-blue-400 animate-pulse overflow-hidden">
+        {/* Moving background inside the circle */}
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-bg-move"
+          style={{
+            backgroundImage: "url('/audio-background.png')", // Replace with the actual path
+          }}
+        />
       </div>
-      {/* Cross icon at bottom center */}
+
+      {/* Cross Icon */}
       <div className="absolute bottom-10">
         <button onClick={handleClose} className="text-white">
           <FaTimes size={30} />

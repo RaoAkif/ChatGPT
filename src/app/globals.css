@@ -19,3 +19,13 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes bg-move {
+  0% { background-position: 50% 50%; }
+  50% { background-position: 55% 45%; }
+  100% { background-position: 50% 50%; }
+}
+
+.animate-bg-move {
+  animation: bg-move 5s infinite linear;
+}
