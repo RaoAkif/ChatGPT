@@ -53,19 +53,19 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center z-50">
-      {/* Pulsating Circle with Moving Background */}
-      <div className="relative w-40 h-40 rounded-full border-4 border-blue-400 animate-pulse overflow-hidden">
+    <div className="fixed inset-0 bg-black flex flex-col justify-center items-center z-50">
+      {/* Pulsating Circle with Sliding Background */}
+      <div className="relative w-40 h-40 rounded-full animate-pulse overflow-hidden">
         {/* Moving background inside the circle */}
         <div
-          className="absolute inset-0 bg-cover bg-center animate-bg-move"
+          className="absolute inset-0 bg-center animate-bg-slide"
           style={{
-            backgroundImage: "url('/audio-background.png')", // Replace with the actual path
+            backgroundImage: "url('/audio-background.svg')",
           }}
         />
       </div>
 
-      {/* Cross Icon */}
+      {/* Close Button */}
       <div className="absolute bottom-10">
         <button onClick={handleClose} className="text-white">
           <FaTimes size={30} />

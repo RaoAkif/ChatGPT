@@ -20,12 +20,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@keyframes bg-move {
-  0% { background-position: 50% 50%; }
-  50% { background-position: 55% 45%; }
-  100% { background-position: 50% 50%; }
+@keyframes bg-slide {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; } /* Move only in the X direction for seamless effect */
 }
 
-.animate-bg-move {
-  animation: bg-move 5s infinite linear;
+.animate-bg-slide {
+  background-size: 200% auto; /* Ensure seamless tiling */
+  animation: bg-slide 10s linear infinite; /* Adjust speed for smooth transition */
 }

@@ -22,7 +22,7 @@ const ChatInputButtons = ({ message, handleSend, isButtonDisabled, onAudioClick 
   return (
     <button
       onClick={handleClick}
-      disabled={isButtonDisabled && hasText} // disable only for sending text if necessary
+      disabled={isButtonDisabled && hasText}
       className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200"
     >
       {hasText ? (
