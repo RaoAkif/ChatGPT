@@ -1,4 +1,4 @@
-// ChatMessage.js
+// ChatMessage.tsx
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -55,7 +55,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ msg, isLoading }) => (
             );
           },
         }}
-        className="prose prose-invert max-w-none"
+        // Conditionally apply whitespace-pre-wrap for non-ai messages.
+        className={`prose prose-invert max-w-none ${
+          msg.role !== 'ai' ? 'whitespace-pre-wrap' : ''
+        }`}
       >
         {msg.content}
       </ReactMarkdown>
