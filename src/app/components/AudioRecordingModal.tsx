@@ -14,6 +14,7 @@ interface SpeechRecognitionEvent extends Event {
 
 const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalProps) => {
   useEffect(() => {
+    // Use the browser's SpeechRecognition API.
     const SpeechRecognition =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -37,10 +38,15 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onerror = (event: any) => {
-      console.error("Speech recognition error", event.error);
+      // Ignore the "aborted" error to avoid console spam when unmounting.
+      if (event.error !== "aborted") {
+        console.error("Speech recognition error:", event.error);
+      }
     };
 
-    recognition.onend = () => {};
+    recognition.onend = () => {
+      // Optionally handle when recognition ends.
+    };
 
     return () => {
       recognition.abort();
@@ -54,9 +60,8 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col justify-center items-center z-50">
-      {/* Pulsating Circle with Sliding Background */}
+      {/* Pulsating circle with a sliding background */}
       <div className="relative w-40 h-40 rounded-full animate-pulse overflow-hidden">
-        {/* Moving background inside the circle */}
         <div
           className="absolute inset-0 bg-center animate-bg-slide"
           style={{
@@ -64,8 +69,7 @@ const AudioRecordingModal = ({ onClose, onTranscription }: AudioRecordingModalPr
           }}
         />
       </div>
-
-      {/* Close Button */}
+      {/* Close button */}
       <div className="absolute bottom-10">
         <button onClick={handleClose} className="text-white">
           <FaTimes size={30} />
