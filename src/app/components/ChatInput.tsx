@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { FaArrowUp } from "react-icons/fa";
+import { IoArrowUp } from "react-icons/io5";
 import { PiWaveformBold } from "react-icons/pi";
 import AudioRecordingModal from "./AudioRecordingModal";
 
@@ -80,7 +80,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             disabled={isButtonDisabled && message.trim().length > 0}
             className="p-2 bg-white text-black rounded-full hover:bg-gray-200 transition-colors"
           >
-            {message.trim() ? <FaArrowUp size={24} /> : <PiWaveformBold size={24} />}
+            {message.trim() ? <IoArrowUp size={20} /> : <PiWaveformBold size={24} />}
           </button>
         </div>
       </div>
