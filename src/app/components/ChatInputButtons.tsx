@@ -1,5 +1,6 @@
 "use client";
-import { FaPaperPlane, FaMicrophone } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
+import { PiWaveformBold } from "react-icons/pi";
 
 type ChatInputButtonsProps = {
   message: string;
@@ -23,12 +24,12 @@ const ChatInputButtons = ({ message, handleSend, isButtonDisabled, onAudioClick 
     <button
       onClick={handleClick}
       disabled={isButtonDisabled && hasText}
-      className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200"
+      className="p-2 text-black bg-white rounded-full hover:bg-slate-50 transition-colors duration-200"
     >
       {hasText ? (
         <FaPaperPlane size={20} />
       ) : (
-        <FaMicrophone size={20} />
+        <PiWaveformBold size={20} />
       )}
     </button>
   );
