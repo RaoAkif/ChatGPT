@@ -1,17 +1,36 @@
-import ChatButton from "./ChatButton";
-import AttachIcon from "./AttachIcon";
+"use client";
+import { FaPaperPlane, FaMicrophone } from "react-icons/fa";
 
 type ChatInputButtonsProps = {
+  message: string;
   handleSend: () => Promise<void>;
   isButtonDisabled: boolean;
+  onAudioClick: () => void;
 };
 
-const ChatInputButtons = ({ handleSend, isButtonDisabled }: ChatInputButtonsProps) => {
+const ChatInputButtons = ({ message, handleSend, isButtonDisabled, onAudioClick }: ChatInputButtonsProps) => {
+  const hasText = message.trim().length > 0;
+
+  const handleClick = () => {
+    if (hasText) {
+      handleSend();
+    } else {
+      onAudioClick();
+    }
+  };
+
   return (
-    <div className="flex items-center gap-2 px-3 py-2 bg-[#212121] rounded-lg">
-      <AttachIcon isLoading={false} />
-      <ChatButton onClick={handleSend} isLoading={false} isButtonDisabled={isButtonDisabled} />
-    </div>
+    <button
+      onClick={handleClick}
+      disabled={isButtonDisabled && hasText} // disable only for sending text if necessary
+      className="p-3 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200"
+    >
+      {hasText ? (
+        <FaPaperPlane size={20} />
+      ) : (
+        <FaMicrophone size={20} />
+      )}
+    </button>
   );
 };
 
