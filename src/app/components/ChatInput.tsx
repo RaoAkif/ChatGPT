@@ -73,7 +73,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         {/* Lower section: Button area (fixed height) */}
         <div
           className="pr-2 pb-4 flex justify-end items-center"
-          style={{ height: "2.5rem" }}
+          style={{ height: "2.5rem", minWidth: "50%" }}
         >
           <button
             onClick={message.trim() ? handleSend : () => setIsAudioModalOpen(true)}
