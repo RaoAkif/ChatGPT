@@ -80,8 +80,8 @@ const ChatInput = ({
 
             {/* Bottom half: Button container with fixed height */}
             <div
-              className="flex justify-end items-center rounded-b-3xl bg-[#2F2F2F] px-4"
-              style={{ height: "45px" }} // fixed height for the button area
+              className="flex justify-end items-center rounded-b-3xl bg-[#2F2F2F] px-4 pr-2 pb-2"
+              style={{ height: "45px" }}
             >
               <ChatInputButtons
                 message={message}

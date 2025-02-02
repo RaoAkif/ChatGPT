@@ -1,5 +1,5 @@
 "use client";
-import { FaPaperPlane } from "react-icons/fa";
+import { IoMdArrowUp } from "react-icons/io";
 import { PiWaveformBold } from "react-icons/pi";
 
 type ChatInputButtonsProps = {
@@ -27,7 +27,7 @@ const ChatInputButtons = ({ message, handleSend, isButtonDisabled, onAudioClick 
       className="p-2 text-black bg-white rounded-full hover:bg-slate-50 transition-colors duration-200"
     >
       {hasText ? (
-        <FaPaperPlane size={20} />
+        <IoMdArrowUp size={20} />
       ) : (
         <PiWaveformBold size={20} />
       )}
