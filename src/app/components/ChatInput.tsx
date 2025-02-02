@@ -1,25 +1,38 @@
+"use client";
 import { useRef, useEffect, useState } from "react";
-import { IoArrowUp } from "react-icons/io5";
-import { PiWaveformBold } from "react-icons/pi";
+import ChatInputButtons from "./ChatInputButtons";
 import AudioRecordingModal from "./AudioRecordingModal";
 
-interface ChatInputProps {
+type ChatInputProps = {
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   handleSend: () => Promise<void>;
   handleAudioSend: (transcribedText: string) => Promise<string | void>;
   isButtonDisabled: boolean;
-}
+  isSidebarOpen: boolean;
+};
 
-const ChatInput: React.FC<ChatInputProps> = ({
+const ChatInput = ({
   message,
   setMessage,
   handleSend,
   handleAudioSend,
   isButtonDisabled,
-}) => {
+  isSidebarOpen,
+}: ChatInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [isAudioModalOpen, setIsAudioModalOpen] = useState<boolean>(false);
+  const [isAudioModalOpen, setIsAudioModalOpen] = useState(false);
+
+  // Auto-resize the textarea as the user types.
+  useEffect(() => {
+    if (textareaRef.current) {
+      // Reset height to recalc scrollHeight properly
+      textareaRef.current.style.height = "auto";
+      // newHeight will be at least the scrollHeight, but you can also cap it.
+      const newHeight = Math.min(textareaRef.current.scrollHeight, 210); // for example, max 210px
+      textareaRef.current.style.height = `${newHeight}px`;
+    }
+  }, [message]);
 
   const handleAudioTranscription = async (transcribedText: string) => {
     const aiResponse = await handleAudioSend(transcribedText);
@@ -29,69 +42,66 @@ const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
-  // Auto-resize the textarea to fit its content up to a max height of 6 lines.
-  useEffect(() => {
-    if (textareaRef.current) {
-      // Reset the height to let the browser recalc the scrollHeight
-      textareaRef.current.style.height = "auto";
-      // Assume each line is ~24px tall.
-      const lineHeight = 24;
-      const maxHeight = lineHeight * 6;
-      const newHeight = Math.min(textareaRef.current.scrollHeight, maxHeight);
-      textareaRef.current.style.height = `${newHeight}px`;
-    }
-  }, [message]);
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen -mt-32">
-      <h1 className="text-white text-3xl mb-4">What can I help with?</h1>
-      
-      {/* 
-        The overall container acts as a “card”. 
-        We give it a fixed overall layout where the textarea is on top and the button area is below.
-      */}
-      <div className="w-full max-w-2xl bg-[#2F2F2F] rounded-3xl shadow-lg overflow-hidden">
-        
-        {/* Upper section: Textarea container */}
-        <div className="px-4 pt-4 pb-2">
-          <textarea
-            ref={textareaRef}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey && !isButtonDisabled) {
-                e.preventDefault();
-                handleSend();
-              }
+    <>
+      <div className="fixed bottom-0 w-full" style={{ backgroundColor: "#212121" }}>
+        <div className="max-w-3xl mx-auto pb-4">
+          {/* Container split vertically into text and button parts */}
+          <div
+            className="flex flex-col gap-0 relative transition-all ease-in-out duration-300"
+            style={{
+              marginRight: isSidebarOpen ? "119px" : "0",
+              marginLeft: isSidebarOpen ? "-132px" : "0",
             }}
-            placeholder="Message ChatGPT"
-            rows={1}
-            className="w-full resize-none overflow-hidden bg-transparent text-white placeholder-gray-400 outline-none text-lg"
-          />
-        </div>
-
-        {/* Lower section: Button area (fixed height) */}
-        <div
-          className="pr-2 pb-4 flex justify-end items-center"
-          style={{ height: "2.5rem", minWidth: "50%" }}
-        >
-          <button
-            onClick={message.trim() ? handleSend : () => setIsAudioModalOpen(true)}
-            disabled={isButtonDisabled && message.trim().length > 0}
-            className="p-2 bg-white text-black rounded-full hover:bg-gray-200 transition-colors"
           >
-            {message.trim() ? <IoArrowUp size={20} /> : <PiWaveformBold size={24} />}
-          </button>
+            {/* Top half: Text input container */}
+            <div
+              className="rounded-t-3xl bg-[#2F2F2F] text-gray-100 px-4 pt-3 pb-0 relative"
+              style={{ minHeight: "45px" }} // Starting at one line height (upper half)
+            >
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey && !isButtonDisabled) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Message ChatFusion"
+                rows={1}
+                className="w-full bg-transparent text-gray-100 placeholder-gray-400 outline-none resize-none"
+                style={{
+                  overflowY: "auto", // will scroll if content exceeds the container's available space
+                }}
+              />
+            </div>
+
+            {/* Bottom half: Button container with fixed height */}
+            <div
+              className="flex justify-end items-center rounded-b-3xl bg-[#2F2F2F] px-4"
+              style={{ height: "45px" }} // fixed height for the button area
+            >
+              <ChatInputButtons
+                message={message}
+                handleSend={handleSend}
+                isButtonDisabled={isButtonDisabled}
+                onAudioClick={() => setIsAudioModalOpen(true)}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* Audio Recording Modal */}
       {isAudioModalOpen && (
         <AudioRecordingModal
           onClose={() => setIsAudioModalOpen(false)}
           onTranscription={handleAudioTranscription}
         />
       )}
-    </div>
+    </>
   );
 };
 
