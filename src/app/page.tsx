@@ -27,27 +27,21 @@ export default function Home() {
 
   const isButtonDisabled = !message.trim() || isLoading;
 
-  // This function sends a message—whether from text or audio—and updates the chat accordingly.
   const handleSendMessage = async (content: string): Promise<string | void> => {
     if (!content.trim()) return;
 
-    // Capture the current messages so we can build the conversation history correctly.
     const previousMessages = [...messages];
     const userMessage: Message = { role: "user", content };
 
-    // Update state with the new user message.
     setMessages([...previousMessages, userMessage]);
-    // Clear the text input (for text messages, this has no effect on audio).
     setMessage("");
 
     setIsLoading(true);
 
-    // Add a temporary AI message (to be updated when the API returns).
     const temporaryResponse: Message = { role: "ai", content: "" };
     setMessages((prev) => [...prev, temporaryResponse]);
 
     try {
-      // Build the conversation history including the new user message.
       const conversationHistory = [...previousMessages, userMessage]
         .map((msg) => `${msg.role}: ${msg.content}`)
         .join("\n");
@@ -84,6 +78,14 @@ export default function Home() {
         };
         return updatedMessages;
       });
+
+      const timestamp = new Date().toISOString();
+      const chatHistory = {
+        timestamp,
+        messages: [...previousMessages, userMessage, { role: "ai", content: aiResponseText }],
+      };
+      localStorage.setItem(timestamp, JSON.stringify(chatHistory));
+
       return aiResponseText;
     } catch (error: unknown) {
       setMessages((prev) => {
@@ -102,26 +104,22 @@ export default function Home() {
     }
   };
 
-  // For text messages, we call handleSendMessage with the current message.
   const handleSend = async () => {
     await handleSendMessage(message);
   };
 
-  // Checks whether the chat container is scrollable and if it’s at the bottom.
   const handleScroll = () => {
     const container = chatContainerRef.current;
     if (container) {
       const isScrollableNow = container.scrollHeight > container.clientHeight;
       setIsScrollable(isScrollableNow);
 
-      // A tolerance of 5px for minor discrepancies.
       const isBottom =
         container.scrollHeight - container.scrollTop - container.clientHeight < 5;
       setIsAtBottom(isBottom);
     }
   };
 
-  // Run when messages update: update scroll position and scroll if already at bottom.
   useEffect(() => {
     handleScroll();
     if (isAtBottom) {
@@ -130,10 +128,9 @@ export default function Home() {
         behavior: "smooth",
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
-  // Attach the scroll event listener.
   useEffect(() => {
     const container = chatContainerRef.current;
     if (container) {
@@ -147,11 +144,21 @@ export default function Home() {
     };
   }, []);
 
+  // New function to load the selected chat from localStorage
+  const loadChatFromStorage = (timestamp: string) => {
+    const storedChat = localStorage.getItem(timestamp);
+    if (storedChat) {
+      const chatData = JSON.parse(storedChat);
+      setMessages(chatData.messages);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-[#212121] text-gray-100">
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        loadChat={loadChatFromStorage}
       />
       <div
         className={`flex flex-col transition-all duration-300 flex-grow ${
