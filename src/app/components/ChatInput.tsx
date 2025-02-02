@@ -71,7 +71,8 @@ const ChatInput = ({
                 }}
                 placeholder="Message ChatFusion"
                 rows={1}
-                className="w-full bg-transparent text-gray-100 placeholder-gray-400 outline-none resize-none"
+                // Added "custom-scroll" for our custom scrollbar
+                className="w-full bg-transparent text-gray-100 placeholder-gray-400 outline-none resize-none custom-scroll"
                 style={{
                   overflowY: "auto", // will scroll if content exceeds the container's available space
                 }}
