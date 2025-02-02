@@ -57,7 +57,7 @@ const ChatInput = ({
             {/* Top half: Text input container */}
             <div
               className="rounded-t-3xl bg-[#2F2F2F] text-gray-100 px-4 pt-3 pb-0 relative"
-              style={{ minHeight: "45px" }} // Starting at one line height (upper half)
+              style={{ minHeight: "65px" }} // Starting at one line height (upper half)
             >
               <textarea
                 ref={textareaRef}
