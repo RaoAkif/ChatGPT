@@ -7,9 +7,10 @@ interface ChatContainerProps {
 }
 
 const ChatContainer = ({ messages, isLoading, chatContainerRef }: ChatContainerProps) => (
-  <div ref={chatContainerRef} className="flex-1 overflow-y-auto">
+  // Added bottom padding (e.g., pb-32 using Tailwind, which equals 8rem)
+  <div ref={chatContainerRef} className="flex-1 overflow-y-auto pb-32">
     <div className="max-w-[55%] mx-auto pr-10">
-      {messages.map((msg: { role: string; content: string }, index: number) => (
+      {messages.map((msg, index) => (
         <ChatMessage key={index} msg={msg} isLoading={isLoading} />
       ))}
     </div>
