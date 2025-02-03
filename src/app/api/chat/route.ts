@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import Groq from "groq-sdk";
 import { extractUrls, fetchScrapedContent } from "../utils/urlUtils";
 import { VALID_MODELS, ValidModel, DEFAULT_MODEL } from "../utils/models";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const prisma = new PrismaClient();
 
 interface PostRequestBody {
   query: string;
@@ -44,27 +42,8 @@ export async function POST(req: Request): Promise<Response> {
       })
       .then((chatCompletion) => chatCompletion.choices?.[0]?.message?.content || "");
 
-    // Save chat history in MongoDB using Prisma
-    const chatHistory = await prisma.chatHistory.create({
-      data: {
-        timestamp: new Date().toISOString(),
-        messages: {
-          create: [
-            {
-              role: "user",
-              content: query,
-            },
-            {
-              role: "ai",
-              content: academicResponse,
-            },
-          ],
-        },
-      },
-    });
-
     return new Response(
-      JSON.stringify({ data: academicResponse, chatId: chatHistory.id }),
+      JSON.stringify({ data: academicResponse }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
