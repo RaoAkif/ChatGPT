@@ -1,3 +1,4 @@
+// src\app\api\chat\[id]\route.ts
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
