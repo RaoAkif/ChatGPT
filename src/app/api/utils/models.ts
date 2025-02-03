@@ -33,4 +33,4 @@ export const VALID_MODELS = [
 
 export type ValidModel = typeof VALID_MODELS[number]['value'];
 
-export const DEFAULT_MODEL: ValidModel = "deepseek-r1-distill-llama-70b";
+export const DEFAULT_MODEL: ValidModel = "llama-3.3-70b-versatile";
