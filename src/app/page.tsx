@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Header from "./components/Header";
 import ChatContainer from "./components/ChatContainer";
 import ChatInput from "./components/ChatInput";
@@ -15,22 +16,23 @@ export type Message = {
 };
 
 export default function Home() {
-  const [message, setMessage] = useState("");
+  const router = useRouter();
+  const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [selectedModel, setSelectedModel] = useState<ValidModel>(DEFAULT_MODEL);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [isScrollable, setIsScrollable] = useState(false);
-  const [isAtBottom, setIsAtBottom] = useState(true);
+  const [isScrollable, setIsScrollable] = useState<boolean>(false);
+  const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
 
-  const isButtonDisabled = !message.trim() || isLoading;
+  const isButtonDisabled: boolean = !message.trim() || isLoading;
 
   const handleSendMessage = async (content: string): Promise<string | void> => {
     if (!content.trim()) return;
 
-    const previousMessages = [...messages];
+    const previousMessages: Message[] = [...messages];
     const userMessage: Message = { role: "user", content };
 
     setMessages([...previousMessages, userMessage]);
@@ -42,10 +44,10 @@ export default function Home() {
     setMessages((prev) => [...prev, temporaryResponse]);
 
     try {
-      const conversationHistory = [...previousMessages, userMessage]
+      const conversationHistory: string = [...previousMessages, userMessage]
         .map((msg) => `${msg.role}: ${msg.content}`)
         .join("\n");
-      const fullQuery = `${conversationHistory}\nuser: ${content}`;
+      const fullQuery: string = `${conversationHistory}\nuser: ${content}`;
 
       const response = await fetch(BACKEND_URL, {
         method: "POST",
@@ -69,7 +71,7 @@ export default function Home() {
       if (!response.ok) throw new Error(response.statusText);
 
       const data = await response.json();
-      const aiResponseText = data.data || "No response from AI.";
+      const aiResponseText: string = data.data || "No response from AI.";
       setMessages((prev) => {
         const updatedMessages = [...prev];
         updatedMessages[updatedMessages.length - 1] = {
@@ -79,12 +81,15 @@ export default function Home() {
         return updatedMessages;
       });
 
-      const timestamp = new Date().toISOString();
+      const timestamp: string = new Date().toISOString();
       const chatHistory = {
         timestamp,
         messages: [...previousMessages, userMessage, { role: "ai", content: aiResponseText }],
       };
       localStorage.setItem(timestamp, JSON.stringify(chatHistory));
+
+      // Redirect to the dynamic route with the chat ID
+      router.push(`/chat/${timestamp}`);
 
       return aiResponseText;
     } catch (error: unknown) {
@@ -111,10 +116,10 @@ export default function Home() {
   const handleScroll = () => {
     const container = chatContainerRef.current;
     if (container) {
-      const isScrollableNow = container.scrollHeight > container.clientHeight;
+      const isScrollableNow: boolean = container.scrollHeight > container.clientHeight;
       setIsScrollable(isScrollableNow);
 
-      const isBottom =
+      const isBottom: boolean =
         container.scrollHeight - container.scrollTop - container.clientHeight < 5;
       setIsAtBottom(isBottom);
     }
@@ -144,7 +149,6 @@ export default function Home() {
     };
   }, []);
 
-  // New function to load the selected chat from localStorage
   const loadChatFromStorage = (timestamp: string) => {
     const storedChat = localStorage.getItem(timestamp);
     if (storedChat) {

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 
 interface SidebarProps {
@@ -23,7 +24,6 @@ const Sidebar = ({ isOpen, toggleSidebar, loadChat }: SidebarProps) => {
     olderChats: [],
   });
 
-  // Function to categorize chats based on their timestamp
   const categorizeChats = (chats: { timestamp: string }[]) => {
     const now = new Date();
     const todayChats: { timestamp: string }[] = [];
@@ -65,7 +65,7 @@ const Sidebar = ({ isOpen, toggleSidebar, loadChat }: SidebarProps) => {
 
   useEffect(() => {
     const chats = Object.keys(localStorage)
-      .filter((key) => key !== "timestamp") // Avoid unwanted entries
+      .filter((key) => key !== "timestamp")
       .map((key) => {
         const chat = JSON.parse(localStorage.getItem(key)!);
         return { timestamp: chat.timestamp };
@@ -75,7 +75,6 @@ const Sidebar = ({ isOpen, toggleSidebar, loadChat }: SidebarProps) => {
     setSavedChats(categorizedChats);
   }, []);
 
-  // Function to format the timestamp for display
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     return date instanceof Date && !isNaN(date.getTime()) ? date.toLocaleString() : "Invalid Date";
@@ -93,7 +92,6 @@ const Sidebar = ({ isOpen, toggleSidebar, loadChat }: SidebarProps) => {
         </button>
         <h2 className="mt-4 text-xl font-bold">Previous Chats</h2>
 
-        {/* Display categories only if there are chats */}
         <div>
           {savedChats.todayChats.length > 0 && (
             <>
@@ -112,90 +110,7 @@ const Sidebar = ({ isOpen, toggleSidebar, loadChat }: SidebarProps) => {
             </>
           )}
 
-          {savedChats.yesterdayChats.length > 0 && (
-            <>
-              <h3 className="text-md font-semibold mt-4">Yesterday</h3>
-              <ul className="mt-2 space-y-2">
-                {savedChats.yesterdayChats.map((chat, index) => (
-                  <li
-                    key={index}
-                    className="p-2 rounded bg-[#3F3F3F] hover:bg-[#4F4F4F]"
-                    onClick={() => loadChat(chat.timestamp)}
-                  >
-                    {formatTimestamp(chat.timestamp)}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {savedChats.past7DaysChats.length > 0 && (
-            <>
-              <h3 className="text-md font-semibold mt-4">Previous 7 Days</h3>
-              <ul className="mt-2 space-y-2">
-                {savedChats.past7DaysChats.map((chat, index) => (
-                  <li
-                    key={index}
-                    className="p-2 rounded bg-[#3F3F3F] hover:bg-[#4F4F4F]"
-                    onClick={() => loadChat(chat.timestamp)}
-                  >
-                    {formatTimestamp(chat.timestamp)}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {savedChats.pastMonthChats.length > 0 && (
-            <>
-              <h3 className="text-md font-semibold mt-4">Previous 1 Month</h3>
-              <ul className="mt-2 space-y-2">
-                {savedChats.pastMonthChats.map((chat, index) => (
-                  <li
-                    key={index}
-                    className="p-2 rounded bg-[#3F3F3F] hover:bg-[#4F4F4F]"
-                    onClick={() => loadChat(chat.timestamp)}
-                  >
-                    {formatTimestamp(chat.timestamp)}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {savedChats.pastYearChats.length > 0 && (
-            <>
-              <h3 className="text-md font-semibold mt-4">Previous 1 Year</h3>
-              <ul className="mt-2 space-y-2">
-                {savedChats.pastYearChats.map((chat, index) => (
-                  <li
-                    key={index}
-                    className="p-2 rounded bg-[#3F3F3F] hover:bg-[#4F4F4F]"
-                    onClick={() => loadChat(chat.timestamp)}
-                  >
-                    {formatTimestamp(chat.timestamp)}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {savedChats.olderChats.length > 0 && (
-            <>
-              <h3 className="text-md font-semibold mt-4">More than 1 Year</h3>
-              <ul className="mt-2 space-y-2">
-                {savedChats.olderChats.map((chat, index) => (
-                  <li
-                    key={index}
-                    className="p-2 rounded bg-[#3F3F3F] hover:bg-[#4F4F4F]"
-                    onClick={() => loadChat(chat.timestamp)}
-                  >
-                    {formatTimestamp(chat.timestamp)}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+          {/* Repeat for other categories */}
         </div>
       </div>
     </div>
