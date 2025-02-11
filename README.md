@@ -1,8 +1,8 @@
 ![Headstarter Banner](https://github.com/user-attachments/assets/80ea1608-e1b1-466f-9153-99153f4a65b8)
 
-# BotFusion
+# ChatGPT
 
-> BotFusion is a powerful solution designed to provide well-structured, Markdown-formatted answers to user queries. It integrates content scraping, mitigation of hallucinations through citation of sources, and rate-limiting for enhanced scalability and user experience.
+> ChatGPT is a powerful solution designed to provide well-structured, Markdown-formatted answers to user queries. It integrates content scraping, mitigation of hallucinations through citation of sources, and rate-limiting for enhanced scalability and user experience.
 
 ![BotFusion](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
 
