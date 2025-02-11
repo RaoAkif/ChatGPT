@@ -2,7 +2,7 @@
 
 # ChatGPT
 
-> ChatGPT is a powerful solution designed to provide well-structured, Markdown-formatted answers to user queries. It integrates content scraping, mitigation of hallucinations through citation of sources, and rate-limiting for enhanced scalability and user experience.
+> A ChatGPT clone with multi-model support, integrating content scraping, source citation to mitigate hallucinations, and rate-limiting for scalability. Designed for accuracy, reliability, and a seamless AI-powered conversational experience.
 
 ![BotFusion](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
 
