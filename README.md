@@ -1,8 +1,8 @@
 ![Headstarter Banner](https://github.com/user-attachments/assets/80ea1608-e1b1-466f-9153-99153f4a65b8)
 
-# ChatGPT
+# ChatAI
 
-> A ChatGPT clone with multi-model support, integrating content scraping, source citation to mitigate hallucinations, and rate-limiting for scalability. Designed for accuracy, reliability, and a seamless AI-powered conversational experience.
+> A ChatAI is a perplexity clone with multi-model support, integrating content scraping, source citation to mitigate hallucinations, and rate-limiting for scalability. Designed for accuracy, reliability, and a seamless AI-powered conversational experience.
 
 ![BotFusion](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
 
@@ -16,7 +16,7 @@
 
 ## Live Demo
 
-[Live Site](https://chatbot-fusion.vercel.app/)
+[Live Site](https://chat.raoakif.site/)
 
 ## Getting Started
 
