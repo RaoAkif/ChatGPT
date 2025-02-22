@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ChatFusion",
+  title: "ChatAI",
   description: "A Generative AI chat interface with various LLM attached",
 };
 

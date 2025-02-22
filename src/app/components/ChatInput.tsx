@@ -69,7 +69,7 @@ const ChatInput = ({
                     handleSend();
                   }
                 }}
-                placeholder="Message ChatFusion"
+                placeholder="Message ChatAI"
                 rows={1}
                 // Added "custom-scroll" for our custom scrollbar
                 className="w-full bg-transparent text-gray-100 placeholder-gray-400 outline-none resize-none custom-scroll"

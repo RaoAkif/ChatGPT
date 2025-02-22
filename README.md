@@ -4,7 +4,7 @@
 
 > A ChatAI is a perplexity clone with multi-model support, integrating content scraping, source citation to mitigate hallucinations, and rate-limiting for scalability. Designed for accuracy, reliability, and a seamless AI-powered conversational experience.
 
-![BotFusion](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
+![ChatAI](https://github.com/user-attachments/assets/a027bb78-d249-428a-9338-adf536d9ed8b)
 
 ## Built With
 
@@ -29,11 +29,11 @@
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/raoakif/botfusion.git
+    git clone https://github.com/raoakif/chatai.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd botfusion
+    cd chatai
     ```
 3. Install dependencies:
     ```bash
@@ -57,10 +57,10 @@
 
 ## Deployment
 
-To deploy BotFusion to Vercel, follow these steps:
+To deploy ChatAI to Vercel, follow these steps:
 
 1. **Fork the Repository**  
-   Fork the [BotFusion repository](https://github.com/raoakif/botfusion) to your GitHub account.
+   Fork the [ChatAI repository](https://github.com/raoakif/chatai) to your GitHub account.
 
 2. **Create a New Project on Vercel**  
    - Go to [Vercel](https://vercel.com) and create a new project from your forked repository.
@@ -75,7 +75,7 @@ To deploy BotFusion to Vercel, follow these steps:
     ```
 
 4. **Deploy the Project**  
-   Click the **Deploy** button, and Vercel will automatically build and deploy your project. Once deployed, your BotFusion instance will be accessible via a Vercel-generated URL.
+   Click the **Deploy** button, and Vercel will automatically build and deploy your project. Once deployed, your ChatAI instance will be accessible via a Vercel-generated URL.
 
 For more detailed deployment instructions, refer to the [Vercel Documentation](https://vercel.com/docs).
 

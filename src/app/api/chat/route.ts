@@ -40,7 +40,8 @@ export async function POST(req: Request): Promise<Response> {
           { role: "user", content: `${query.trim()} ${scrapedContent}` },
         ],
       })
-      .then((chatCompletion) => chatCompletion.choices?.[0]?.message?.content || "");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((chatCompletion: { choices: { message: { content: any; }; }[]; }) => chatCompletion.choices?.[0]?.message?.content || "");
 
     return new Response(
       JSON.stringify({ data: academicResponse }),
